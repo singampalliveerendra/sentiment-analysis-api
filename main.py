@@ -14,5 +14,13 @@ def home():
 
 @app.get("/predict")
 def predict(text: str):
-    result = classifier(text)
-    return {"input": text, "result": result}
+    cleaned_text = text.strip()  # remove extra spaces
+    print("Processing text:", cleaned_text)  # debug log
+    
+    result = classifier(cleaned_text)
+    
+    return {
+        "input": cleaned_text,
+        "sentiment": result[0]["label"],
+        "confidence": result[0]["score"]
+    }
