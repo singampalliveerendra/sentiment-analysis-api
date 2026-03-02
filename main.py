@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from transformers import pipeline
 
 app = FastAPI()
@@ -14,8 +14,12 @@ def home():
 
 @app.get("/predict")
 def predict(text: str):
-    cleaned_text = text.strip()  # remove extra spaces
-    print("Processing text:", cleaned_text)  # debug log
+    cleaned_text = text.strip()
+    
+    if not cleaned_text:
+        raise HTTPException(status_code=400, detail="Input text cannot be empty")
+    
+    print("Processing text:", cleaned_text)
     
     result = classifier(cleaned_text)
     
